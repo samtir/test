@@ -51,21 +51,24 @@
   <!-- <script src="./promises.js"></script> -->
   <!-- <script src="./fetch.js"></script> -->
   <div>
-    <button id="btnShowNtf">mostrar alerta</button>
+    <button id="btnShowNtf" onclick="showNotification()">mostrar alerta</button>
   </div>
   <script src="./script.js"></script>
   <script type="text/javascript">
-    document.getElementById("btnShowNtf").addEventListener('click',evnt=>{
-      if( Notification && Notification.permission !== 'denied' ) {
-        Notification.requestPermission(status => {
-          console.log(status)
-          let n = new Notification('Título', {
-            body: 'Soy una notificación :)',
-            icon: './img/icon_192x192.png'
-          })
-        })
+    function showNotification() {
+        Notification.requestPermission(function(result) {
+          if (result === 'granted') {
+            navigator.serviceWorker.ready.then(function(registration) {
+              registration.showNotification('Vibration Sample', {
+                body: 'Buzz! Buzz!',
+                icon: '../images/touch/chrome-touch-icon-192x192.png',
+                vibrate: [200, 100, 200, 100, 200, 100, 200],
+                tag: 'vibration-sample'
+              });
+            });
+          }
+        });
       }
-    })
   </script>
 </body>
 </html>
